@@ -10,7 +10,7 @@ import { useState,useEffect } from 'react'
 
  const App = () => {
   const [notes,setNotes] = useState([])
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchData();
   }, []);
@@ -19,9 +19,10 @@ import { useState,useEffect } from 'react'
     try {
       const response = await axios.get('https://keeperbackend-6rnd.onrender.com/get'); 
       setNotes(response.data);
-     
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoading(false);
     }
   };
 
@@ -46,18 +47,18 @@ import { useState,useEffect } from 'react'
         return index!=id
       })
     })
-    window.location.reload()
+    fetchData()
   }
 
   return (
     <div>
       <Header/>
       <Input onAdd={addNote}/>
-        {  
-          notes.map((note)=>(
-            <Note  key={note.id} id={note.id} title={note.title} content ={note.content} deleteNote={deleteNote}  />
-          ))
-        }
+      { loading ? <p>Loading...</p> :
+      notes.map((note)=>(
+        <Note  key={note.id} id={note.id} title={note.title} content ={note.content} deleteNote={deleteNote}  />
+      ))
+    }
       <Footer/>
     </div>
   )

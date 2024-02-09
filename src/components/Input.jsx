@@ -38,6 +38,7 @@ const Input = (props) => {
       });
       event.preventDefault();
     } catch (e) {
+     
       console.error(e);
     }
   }
@@ -45,6 +46,13 @@ const Input = (props) => {
   function handleExpand() {
     setExpand(true);
   }
+  function handleKeyPress(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      submitNote();
+      event.preventDefault();
+    }
+  }
+
 
   return (
     <form className='create-note'>
@@ -65,6 +73,7 @@ const Input = (props) => {
         onClick={() => handleExpand()}
         onChange={handleChange}
         value={note.content}
+        onKeyDown={handleKeyPress}
         id=""
         cols="30"
         rows={expand ? "5" : "1"}
